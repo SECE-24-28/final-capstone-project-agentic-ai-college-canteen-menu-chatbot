@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College Canteen AI Chatbot</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --surface-soft: #f0f5f1;
+      --text: #17201b;
+      --muted: #657067;
+      --primary: #1f7a4d;
+      --primary-dark: #145c39;
+      --accent: #e77c37;
+      --line: #dfe6e1;
+      --shadow: 0 18px 50px rgba(29, 48, 38, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        linear-gradient(135deg, rgba(31, 122, 77, 0.10), transparent 32%),
+        linear-gradient(315deg, rgba(231, 124, 55, 0.10), transparent 34%),
+        var(--bg);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border-radius: var(--radius);
+      background: var(--primary);
+      color: #fff;
+      font-size: 25px;
+      box-shadow: 0 12px 26px rgba(31, 122, 77, 0.22);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 2.5vw, 2.1rem);
+      line-height: 1.1;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #29a364;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.95fr) minmax(360px, 1.45fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .intro {
+      padding: 24px;
+    }
+
+    .intro h2,
+    .menu-section h2 {
+      margin: 0 0 10px;
+      font-size: 1.22rem;
+    }
+
+    .intro p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .quick-btn {
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      text-align: left;
+      padding: 10px 12px;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .quick-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(31, 122, 77, 0.45);
+      background: var(--surface-soft);
+    }
+
+    .menu-section {
+      border-top: 1px solid var(--line);
+      padding: 22px 24px 24px;
+    }
+
+    .menu-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .menu-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .menu-card h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .menu-card p {
+      grid-column: 1 / -1;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .price {
+      color: var(--primary-dark);
+      font-weight: 700;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 26px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #fff3e8;
+      color: #8a431b;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .chat-panel {
+      display: grid;
+      grid-template-rows: auto minmax(420px, 58vh) auto;
+      min-height: 640px;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .chat-header h2 {
+      margin: 0;
+      font-size: 1.12rem;
+    }
+
+    .chat-header span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .chat-log {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 20px;
+      overflow-y: auto;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)),
+        repeating-linear-gradient(45deg, #f8faf8 0, #f8faf8 12px, #f2f6f3 12px, #f2f6f3 24px);
+    }
+
+    .message {
+      max-width: min(82%, 620px);
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .message.bot {
+      align-self: flex-start;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .chat-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 16px;
+      border-top: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .chat-form input {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0 14px;
+      color: var(--text);
+      outline: none;
+    }
+
+    .chat-form input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(31, 122, 77, 0.12);
+    }
+
+    .send-btn {
+      min-width: 106px;
+      min-height: 48px;
+      border: 0;
+      border-radius: var(--radius);
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      transition: background 0.18s ease, transform 0.18s ease;
+    }
+
+    .send-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .send-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+      transform: none;
+    }
+
+    @media (max-width: 860px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .chat-panel {
+        min-height: 580px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .app {
+        width: min(100% - 20px, 1180px);
+        padding: 18px 0;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .quick-actions,
+      .chat-form {
+        grid-template-columns: 1fr;
+      }
+
+      .message {
+        max-width: 94%;
+      }
+
+      .send-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">AI</div>
+        <div>
+          <h1>College Canteen Chatbot</h1>
+          <p>Ask about menu items, prices, meal ideas, and budget-friendly choices.</p>
+        </div>
+      </div>
+      <div class="status" aria-label="Assistant status">
+        <span class="status-dot"></span>
+        Ready to help
+      </div>
+    </header>
+
+    <section class="layout">
+      <aside class="panel">
+        <div class="intro">
+          <h2>Quick Questions</h2>
+          <p>Start with one of these prompts or type your own canteen question in the chat.</p>
+          <div class="quick-actions" aria-label="Quick chatbot prompts">
+            <button class="quick-btn" type="button" data-prompt="What is available for breakfast?">Breakfast</button>
+            <button class="quick-btn" type="button" data-prompt="Suggest a vegetarian meal under 80 rupees.">Veg under Rs. 80</button>
+            <button class="quick-btn" type="button" data-prompt="What snacks are available today?">Snacks</button>
+            <button class="quick-btn" type="button" data-prompt="Recommend a filling lunch combo.">Lunch combo</button>
+          </div>
+        </div>
+
+        <div class="menu-section">
+          <h2>Today's Popular Menu</h2>
+          <div class="menu-grid" id="menuGrid"></div>
+        </div>
+      </aside>
+
+      <section class="panel chat-panel" aria-label="Canteen chatbot">
+        <div class="chat-header">
+          <div>
+            <h2>AI Menu Assistant</h2>
+            <span>Natural language help for students and staff</span>
+          </div>
+        </div>
+
+        <div class="chat-log" id="chatLog" aria-live="polite"></div>
+
+        <form class="chat-form" id="chatForm">
+          <input
+            id="chatInput"
+            type="text"
+            autocomplete="off"
+            placeholder="Ask: What can I eat for Rs. 50?"
+            aria-label="Type your canteen question"
+          />
+          <button class="send-btn" id="sendBtn" type="submit">Send</button>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const menuItems = [
+      {
+        name: "Masala Dosa",
+        category: "Breakfast",
+        price: 45,
+        type: "veg",
+        description: "Crispy dosa with potato masala and chutney."
+      },
+      {
+        name: "Idli Sambar",
+        category: "Breakfast",
+        price: 35,
+        type: "veg",
+        description: "Soft idlis served with hot sambar."
+      },
+      {
+        name: "Veg Fried Rice",
+        category: "Lunch",
+        price: 70,
+        type: "veg",
+        description: "Rice tossed with vegetables and mild spices."
+      },
+      {
+        name: "Chicken Biryani",
+        category: "Lunch",
+        price: 120,
+        type: "non-veg",
+        description: "Aromatic rice with chicken and raita."
+      },
+      {
+        name: "Samosa",
+        category: "Snacks",
+        price: 15,
+        type: "veg",
+        description: "Crisp pastry with spiced potato filling."
+      },
+      {
+        name: "Tea",
+        category: "Drinks",
+        price: 10,
+        type: "veg",
+        description: "Fresh hot tea for a quick break."
+      }
+    ];
+
+    const chatLog = document.getElementById("chatLog");
+    const chatForm = document.getElementById("chatForm");
+    const chatInput = document.getElementById("chatInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const menuGrid = document.getElementById("menuGrid");
+
+    function renderMenu() {
+      menuGrid.innerHTML = menuItems.map((item) => `
+        <article class="menu-card">
+          <h3>${item.name}</h3>
+          <span class="price">Rs. ${item.price}</span>
+          <span class="tag">${item.category} | ${item.type}</span>
+          <p>${item.description}</p>
+        </article>
+      `).join("");
+    }
+
+    function addMessage(text, sender = "bot") {
+      const message = document.createElement("div");
+      message.className = `message ${sender}`;
+      message.textContent = text;
+      chatLog.appendChild(message);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function findBudget(query) {
+      const match = query.match(/(?:rs\.?|rupees|under|below|within)\s*(\d+)|(\d+)\s*(?:rs\.?|rupees)/i);
+      return match ? Number(match[1] || match[2]) : null;
+    }
+
+    function localReply(query) {
+      const text = query.toLowerCase();
+      const budget = findBudget(query);
+      const wantsVeg = text.includes("veg") || text.includes("vegetarian");
+      const wantsNonVeg = text.includes("non veg") || text.includes("non-veg") || text.includes("chicken");
+      const category = ["breakfast", "lunch", "snacks", "drinks"].find((item) => text.includes(item));
+
+      let results = [...menuItems];
+
+      if (category) {
+        results = results.filter((item) => item.category.toLowerCase() === category);
+      }
+
+      if (wantsVeg && !wantsNonVeg) {
+        results = results.filter((item) => item.type === "veg");
+      }
+
+      if (wantsNonVeg) {
+        results = results.filter((item) => item.type === "non-veg");
+      }
+
+      if (budget) {
+        results = results.filter((item) => item.price <= budget);
+      }
+
+      if (text.includes("recommend") || text.includes("suggest") || text.includes("combo")) {
+        const combo = menuItems.filter((item) => ["Veg Fried Rice", "Samosa", "Tea"].includes(item.name));
+        const total = combo.reduce((sum, item) => sum + item.price, 0);
+        return `Recommended combo: ${combo.map((item) => item.name).join(", ")}. Total: Rs. ${total}. It is filling, simple, and budget-friendly.`;
+      }
+
+      if (text.includes("price") || text.includes("cost")) {
+        const item = menuItems.find((menuItem) => text.includes(menuItem.name.toLowerCase()));
+        return item ? `${item.name} costs Rs. ${item.price}.` : "Tell me the food item name and I will share its price.";
+      }
+
+      if (results.length > 0 && (category || budget || wantsVeg || wantsNonVeg)) {
+        return results.map((item) => `${item.name} - Rs. ${item.price} (${item.category}, ${item.type})`).join("\n");
+      }
+
+      if (text.includes("menu") || text.includes("available") || text.includes("today")) {
+        return menuItems.map((item) => `${item.name} - Rs. ${item.price}`).join("\n");
+      }
+
+      return "I can help with today's menu, prices, veg or non-veg filters, and budget suggestions. Try asking: Suggest a vegetarian meal under Rs. 80.";
+    }
+
+    async function askBackend(message) {
+      const endpoints = ["/chat", "/ask", "/api/chat", "/get_response"];
+
+      for (const endpoint of endpoints) {
+        try {
+          const response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message, query: message, question: message })
+          });
+
+          if (!response.ok) {
+            continue;
+          }
+
+          const contentType = response.headers.get("content-type") || "";
+          if (contentType.includes("application/json")) {
+            const data = await response.json();
+            return data.response || data.answer || data.message || data.reply;
+          }
+
+          const text = await response.text();
+          if (text.trim()) {
+            return text.trim();
+          }
+        } catch (error) {
+          continue;
+        }
+      }
+
+      return null;
+    }
+
+    async function handleQuestion(question) {
+      const cleanQuestion = question.trim();
+      if (!cleanQuestion) {
+        return;
+      }
+
+      addMessage(cleanQuestion, "user");
+      chatInput.value = "";
+      sendBtn.disabled = true;
+
+      const waitingMessage = document.createElement("div");
+      waitingMessage.className = "message bot";
+      waitingMessage.textContent = "Checking the canteen menu...";
+      chatLog.appendChild(waitingMessage);
+      chatLog.scrollTop = chatLog.scrollHeight;
+
+      const backendReply = await askBackend(cleanQuestion);
+      waitingMessage.textContent = backendReply || localReply(cleanQuestion);
+      sendBtn.disabled = false;
+      chatInput.focus();
+    }
+
+    chatForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      handleQuestion(chatInput.value);
+    });
+
+    document.querySelectorAll("[data-prompt]").forEach((button) => {
+      button.addEventListener("click", () => {
+        handleQuestion(button.dataset.prompt);
+      });
+    });
+
+    renderMenu();
+    addMessage("Hi! I am your canteen assistant. Ask me about today's menu, prices, vegetarian options, snacks, or meals within your budget.");
+  </script>
+</body>
+</html>
