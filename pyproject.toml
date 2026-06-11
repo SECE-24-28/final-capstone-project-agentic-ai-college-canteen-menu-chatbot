@@ -1,0 +1,9 @@
+[project]
+name = "hostel-weekly-food-chatbot"
+version = "1.0.0"
+description = "A Flask-based hostel weekly food schedule chatbot."
+requires-python = ">=3.10"
+dependencies = ["Flask==3.0.3"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

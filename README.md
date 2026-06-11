@@ -1,65 +1,64 @@
-# 🍽️ Agentic AI College Canteen Menu Chatbot
+# Hostel Weekly Food Chatbot
 
-An intelligent AI-powered chatbot designed to assist students and staff in accessing college canteen information through natural language conversations. The chatbot provides menu details, food recommendations, pricing information, and can answer canteen-related queries instantly.
+A full Flask project for a hostel-style weekly food menu assistant. The chatbot answers questions like "What is Monday menu?", "What is Friday dinner?", "What is today's breakfast?", and "Show full week menu".
 
----
-
-## 📌 Project Overview
-
-College canteens often rely on printed menus or manual inquiries, making it difficult for students to quickly find information about available food items. This project solves that problem by introducing an Agentic AI chatbot that interacts with users in a conversational manner and provides real-time menu assistance.
-
-The chatbot understands user requests, retrieves relevant menu information, and delivers accurate responses, creating a seamless user experience.
-
----
-
-## 🎯 Objectives
-
-- Provide instant access to canteen menu information.
-- Reduce waiting time for menu inquiries.
-- Improve student convenience through AI-driven interactions.
-- Deliver personalized food recommendations.
-- Demonstrate the practical use of Agentic AI in campus environments.
-
----
-
-## ✨ Features
-
-### Menu Management
-- View today's menu
-- Search food items by name
-- Browse breakfast, lunch, snacks, and dinner options
-- Display item prices
-
-### AI Chatbot
-- Natural language understanding
-- Context-aware responses
-- Intelligent food recommendations
-- User-friendly conversational interface
-
-### User Assistance
-- Vegetarian and non-vegetarian filtering
-- Budget-friendly meal suggestions
-- Quick menu lookup
-- Frequently asked question handling
-
----
-
-## 🏗️ System Architecture
+## Project Structure
 
 ```text
-User
-  │
-  ▼
-Frontend (HTML/CSS/JavaScript)
-  │
-  ▼
-Flask Backend
-  │
-  ▼
-Agentic AI Module
-  │
-  ▼
-Menu Database
-  │
-  ▼
-Response Generation
+clg_canteen_AI_Chatbot/
+|-- data/
+|   `-- menu.csv
+|-- database/
+|   `-- menu.db
+|-- models/
+|   `-- menu_index.pkl
+|-- src/
+|   |-- __init__.py
+|   |-- preprocess.py
+|   |-- recommender.py
+|   |-- train_embeddings.py
+|   `-- utils.py
+|-- static/
+|   |-- css/style.css
+|   `-- js/app.js
+|-- templates/
+|   `-- index.html
+|-- .env
+|-- .python-version
+|-- app.py
+|-- main.py
+|-- pyproject.toml
+|-- README.md
+`-- requirements.txt
+```
+
+## Setup
+
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python main.py --train --init-db
+python app.py
+```
+
+Open `http://127.0.0.1:5000` in your browser.
+
+## Terminal Usage
+
+```powershell
+python main.py --ask "what is monday menu"
+python main.py --ask "what is friday dinner"
+python main.py --ask "show full week menu"
+```
+
+## Features
+
+- Weekly hostel menu loaded from `data/menu.csv`
+- Day-wise breakfast, lunch, snacks, and dinner schedule
+- Answers natural questions about any day or meal
+- Supports today and tomorrow queries
+- Pickle-based searchable menu index in `models/menu_index.pkl`
+- SQLite menu sync in `database/menu.db`
+- Flask API endpoints: `/api/menu`, `/chat`, `/ask`, `/api/chat`
+- Responsive frontend with quick prompts and day filtering
