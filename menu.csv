@@ -1,0 +1,29 @@
+day,meal,foods,notes,available
+Monday,Breakfast,"Idli, sambar, coconut chutney, tea","South Indian breakfast",yes
+Monday,Lunch,"Rice, dal, aloo fry, chapati, curd","Regular hostel lunch",yes
+Monday,Snacks,"Samosa, tea","Evening snack",yes
+Monday,Dinner,"Chapati, paneer curry, rice, rasam","Vegetarian dinner",yes
+Tuesday,Breakfast,"Poha, boiled egg, tea","Light breakfast",yes
+Tuesday,Lunch,"Veg pulao, raita, cucumber salad, papad","Rice special",yes
+Tuesday,Snacks,"Veg puff, coffee","Bakery snack",yes
+Tuesday,Dinner,"Rice, sambar, cabbage poriyal, curd","Simple dinner",yes
+Wednesday,Breakfast,"Masala dosa, sambar, chutney","Dosa breakfast",yes
+Wednesday,Lunch,"Rice, chana masala, chapati, salad","Protein lunch",yes
+Wednesday,Snacks,"Bread pakoda, tea","Evening snack",yes
+Wednesday,Dinner,"Chicken curry, rice, chapati, dal","Non-veg dinner option",yes
+Thursday,Breakfast,"Upma, banana, tea","Light breakfast",yes
+Thursday,Lunch,"Lemon rice, curd rice, pickle, papad","South Indian lunch",yes
+Thursday,Snacks,"Bonda, coffee","Evening snack",yes
+Thursday,Dinner,"Chapati, mixed veg curry, rice, rasam","Vegetarian dinner",yes
+Friday,Breakfast,"Poori, potato masala, tea","Special breakfast",yes
+Friday,Lunch,"Rice, rajma curry, chapati, salad","North Indian lunch",yes
+Friday,Snacks,"Noodles, tea","Evening snack",yes
+Friday,Dinner,"Egg curry, rice, chapati, dal","Egg dinner option",yes
+Saturday,Breakfast,"Aloo paratha, curd, tea","Filling breakfast",yes
+Saturday,Lunch,"Tomato rice, dal, vegetable fry, curd","Weekend lunch",yes
+Saturday,Snacks,"Cutlet, coffee","Evening snack",yes
+Saturday,Dinner,"Veg biryani, raita, gravy","Weekend special dinner",yes
+Sunday,Breakfast,"Pongal, vada, sambar, chutney","Sunday breakfast special",yes
+Sunday,Lunch,"Chicken biryani, raita, salad","Sunday special lunch",yes
+Sunday,Snacks,"Cake, tea","Evening snack",yes
+Sunday,Dinner,"Rice, dal tadka, chapati, vegetable kurma","Light dinner",yes
